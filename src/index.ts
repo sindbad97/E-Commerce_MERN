@@ -1,6 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import userRoute from "./routes/userRoute";
+import { seedIntialProducts } from "./services/productService";
+import productRoute from "./routes/productRoute";
+
 
 /**
  * Entry point for the e-commerce backend application.
@@ -22,7 +25,11 @@ app.get("/", (req, res) => {
   res.send("E-commerce backend is running!");
 });
 
+// seeding initial products
+seedIntialProducts();
+
 app.use('/user', userRoute);
+app.use('/product', productRoute);
 
 // Start server
 app.listen(PORT, () => {
