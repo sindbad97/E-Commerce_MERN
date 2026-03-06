@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import userRoute from "./routes/userRoute";
 import { seedIntialProducts } from "./services/productService";
 import productRoute from "./routes/productRoute";
+import cartRoute from "./routes/cartRoute";
 
 
 /**
@@ -30,6 +31,7 @@ seedIntialProducts();
 
 app.use('/user', userRoute);
 app.use('/product', productRoute);
+app.use('/cart', cartRoute);
 
 // Start server
 app.listen(PORT, () => {
