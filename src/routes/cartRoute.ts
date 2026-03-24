@@ -1,6 +1,7 @@
 import express from "express";
-import { getActiveCartForUser } from "../services/cartService";
-import validateJWT from "../middlewares/validateJWT";
+import { addItemToCart, getActiveCartForUser, updateItemInCart } from "../services/cartService";
+import  validateJWT from "../middlewares/validateJWT";
+
 
 const router = express.Router();
 
@@ -10,10 +11,36 @@ router.get("/", validateJWT, async (req, res) => {
         return;
     }
     const userId = req.user._id;
+
+    
    
     // get Active Cart For User
     const cart = await getActiveCartForUser({ userId });
     res.status(200).send(cart);
 });
 
-export default router;
+router.post('/items', validateJWT, async (req, res) => {
+    if (!req.user) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+    }
+    const userId = req.user._id;
+    
+    const { productId, quantity} = req.body;
+    const response = await addItemToCart({ userId, productId, quantity });
+    res.status(response.statusCode).send(response.data);
+});
+
+router.put("/items", validateJWT, async (req, res) => {
+    if (!req.user) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+    }
+    const userId = req.user._id;
+    const { productId, quantity } = req.body;
+    const response = await updateItemInCart ({ userId, productId, quantity });
+    res.status(response.statusCode).send(response.data);
+});
+
+
+
